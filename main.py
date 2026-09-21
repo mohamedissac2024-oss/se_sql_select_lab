@@ -48,4 +48,41 @@ sum_total_price = pd.read_sql("""SELECT SUM(ROUND(priceEach * quantityOrdered)) 
 
 # STEP 9
 # Replace None with your code
-df_day_month_year = pd.read_sql("""SELECT strftime('%d', orderDate) AS day, strftime('%m', orderDate) AS month, strftime('%Y', orderDate) AS year FROM orders""", conn)
+df_day_month_year = pd.read_sql("""
+SELECT
+    orderDate,
+    strftime('%d', orderDate) AS day,
+    strftime('%m', orderDate) AS month,
+    strftime('%Y', orderDate) AS year
+FROM orders
+""", conn)
+
+
+# ---------------------------------------------------------------
+# Running `python3 main.py` inspects the results of each step.
+# ---------------------------------------------------------------
+if __name__ == "__main__":
+    # Reference queries provided in the README
+    employee_data = pd.read_sql("""SELECT * FROM employees""", conn)
+    order_details = pd.read_sql("""SELECT * FROM orderDetails;""", conn)
+
+    results = {
+        "Employee Data": employee_data,
+        "Order Details Data": order_details,
+        "STEP 2 df_first_five": df_first_five,
+        "STEP 3 df_five_reverse": df_five_reverse,
+        "STEP 4 df_alias": df_alias,
+        "STEP 5 df_executive": df_executive,
+        "STEP 6 df_name_length": df_name_length,
+        "STEP 7 df_short_title": df_short_title,
+        "STEP 8 sum_total_price": sum_total_price,
+        "STEP 9 df_day_month_year": df_day_month_year,
+    }
+
+    for title, result in results.items():
+        print(f"---------------------{title}---------------------")
+        print(result)
+        print(f"-------------------End {title}-------------------")
+
+    # Close the connection to the database
+    conn.close()
